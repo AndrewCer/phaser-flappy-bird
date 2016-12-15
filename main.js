@@ -1,3 +1,9 @@
+var highScore = 0;
+var text = {
+  highScore: "Best: ",
+  score: "Score: "
+};
+
 var mainState = {
     preload: function() {
         // This function will be executed at the beginning
@@ -14,7 +20,8 @@ var mainState = {
         this.jumpSound = game.add.audio('jump');
 
         this.score = 0;
-        this.labelScore = game.add.text(20, 20, "0", { font: "30px Arial", fill: "#ffffff" });
+        this.labelScore = game.add.text(20, 20, text.score + this.score, { font: "20px Arial", fill: "#ffffff" });
+        this.labelHighScore = game.add.text(20, 50, text.highScore + highScore, { font: "20px Arial", fill: "#ffffff" });
 
 
         // Change the background color of the game to blue
@@ -90,7 +97,9 @@ var mainState = {
       if (this.blockScore) return;
       else {
         this.score += 1;
-        this.labelScore.text = this.score;
+        if (highScore < this.score) highScore = this.score;
+        this.labelScore.text = text.score + this.score;
+        this.labelHighScore.text = text.highScore + highScore;
         // this.blockScore = true;
       }
     },
