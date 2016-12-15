@@ -42,8 +42,9 @@ var mainState = {
         var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spaceKey.onDown.add(this.jump, this);
 
-        // Create an empty group
+        // Create empty groups
         this.pipes = game.add.group();
+        this.invisPipes = game.add.group();
 
         this.timer = game.time.events.loop(1500, this.addRowOfPipes, this);
 
@@ -58,8 +59,11 @@ var mainState = {
         if (this.bird.y < 0 || this.bird.y > 490) this.restartGame();
 
         if (this.bird.angle < 20) this.bird.angle += 1;
+        // console.log("this.bird: ");
+        // console.log(this.bird.position.x);
 
         game.physics.arcade.overlap(this.bird, this.pipes, this.hitPipe, null, this);
+        game.physics.arcade.overlap(this.bird, this.invisPipes, this.hitInvisPipe, null, this);
 
     },
 
@@ -85,6 +89,16 @@ var mainState = {
         //in one line: game.add.tween(this.bird).to({angle: -20}, 100).start();
 
     },
+    hitInvisPipe: function (sprite, invis) {
+      console.log(invis);
+      invis.exists = false;
+      if (this.blockScore) return;
+      else {
+        this.score += 1;
+        this.labelScore.text = this.score;
+        // this.blockScore = true;
+      }
+    },
     hitPipe: function() {
       // If the bird has already hit a pipe, do nothing
       // It means the bird is already falling off the screen
@@ -101,6 +115,9 @@ var mainState = {
       this.pipes.forEach(function(p){
           p.body.velocity.x = 0;
       }, this);
+      this.invisPipes.forEach(function (p) {
+        p.body.velocity.x = 0;
+      }, this);
     },
     // Restart the game
     restartGame: function() {
@@ -114,6 +131,7 @@ var mainState = {
         // Add the pipe to our previously created group
         this.pipes.add(pipe);
 
+
         // Enable physics on the pipe
         game.physics.arcade.enable(pipe);
 
@@ -123,6 +141,24 @@ var mainState = {
         // Automatically kill the pipe when it's no longer visible
         pipe.checkWorldBounds = true;
         pipe.outOfBoundsKill = true;
+
+
+    },
+    addBlankPipe: function(x, y) {
+
+      var invisPipe = game.add.sprite(x, y + 35);
+
+      this.invisPipes.add(invisPipe);
+
+      game.physics.arcade.enable(invisPipe);
+
+      invisPipe.body.velocity.x = -200;
+
+      invisPipe.checkWorldBounds = true;
+      invisPipe.outOfBoundsKill = true;
+
+
+
     },
     addRowOfPipes: function() {
 
@@ -134,10 +170,8 @@ var mainState = {
       // With one big hole at position 'hole' and 'hole + 1'
       for (var i = 0; i < 8; i++) {
         if (i != hole && i != hole + 1) this.addOnePipe(400, i * 60 + 10);
+        else if (i === hole) this.addBlankPipe(400, i * 60 + 10);
       }
-
-      this.score += 1;
-      this.labelScore.text = this.score;
 
     }
 
