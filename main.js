@@ -95,7 +95,7 @@ var mainState = {
     hitInvisPipe: function (sprite, invis) {
       invis.exists = false;
       if (this.blockScore) return;
-      else {
+      else if (this.bird.alive){
         this.score += 1;
         if (highScore < this.score) highScore = this.score;
         this.labelScore.text = text.score + this.score;
