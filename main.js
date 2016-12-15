@@ -16,6 +16,7 @@ var mainState = {
 
         this.score = 0;
         this.labelScore = game.add.text(20, 20, "0", { font: "30px Arial", fill: "#ffffff" });
+        console.log(this.labelScore);
 
 
         // Change the background color of the game to blue
@@ -135,9 +136,8 @@ var mainState = {
         if (i != hole && i != hole + 1) this.addOnePipe(400, i * 60 + 10);
       }
 
-// TODO: flesh this out
       this.score += 1;
-      // this.lableScore.text = this.score;
+      this.labelScore.text = this.score;
 
     }
 
