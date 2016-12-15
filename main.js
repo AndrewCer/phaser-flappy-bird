@@ -10,13 +10,11 @@ var mainState = {
     create: function() {
         // This function is called after the preload function
         // Here we set up the game, display sprites, etc.
-        console.log(game.input);
 
         this.jumpSound = game.add.audio('jump');
 
         this.score = 0;
         this.labelScore = game.add.text(20, 20, "0", { font: "30px Arial", fill: "#ffffff" });
-        console.log(this.labelScore);
 
 
         // Change the background color of the game to blue
@@ -59,8 +57,6 @@ var mainState = {
         if (this.bird.y < 0 || this.bird.y > 490) this.restartGame();
 
         if (this.bird.angle < 20) this.bird.angle += 1;
-        // console.log("this.bird: ");
-        // console.log(this.bird.position.x);
 
         game.physics.arcade.overlap(this.bird, this.pipes, this.hitPipe, null, this);
         game.physics.arcade.overlap(this.bird, this.invisPipes, this.hitInvisPipe, null, this);
@@ -90,7 +86,6 @@ var mainState = {
 
     },
     hitInvisPipe: function (sprite, invis) {
-      console.log(invis);
       invis.exists = false;
       if (this.blockScore) return;
       else {
@@ -179,7 +174,6 @@ var mainState = {
 
 // Initialize Phaser, and create a 400px by 490px game
 var game = new Phaser.Game(400, 490);
-console.log(Phaser);
 
 // Add the 'mainState' and call it 'main'
 game.state.add('main', mainState);
